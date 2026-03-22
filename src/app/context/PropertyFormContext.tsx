@@ -30,6 +30,7 @@ export interface PropertyFormData {
   // Step 5 — Goals
   askingPrice: string;
   targetCashAtClose: string;
+  mortgage: string;       // outstanding mortgage balance
   timeline: string;    // 'asap' | '30' | '60' | '90+'
   motivation: string;
 }
@@ -54,6 +55,7 @@ const DEFAULT: PropertyFormData = {
   primaryPhotoIndex: 0,
   askingPrice: '250000',
   targetCashAtClose: '29375',
+  mortgage: '',
   timeline: '30',
   motivation: '',
 };

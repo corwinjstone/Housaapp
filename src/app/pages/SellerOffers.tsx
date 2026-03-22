@@ -1,39 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router";
-import imgBitmap1  from "figma:asset/6812751d49f41754ffb2ffca26d1124bfb1e3b24.png";
-import imgBitmap2  from "figma:asset/e0febf6d821db28fe375d07c1857186c4e28b29c.png";
-import imgBitmap3  from "figma:asset/4b9bbf5d06db9f55e39f4cf6964b1dae752ab4eb.png";
-import imgBitmap4  from "figma:asset/c4bbd30130a452ca898840e5445212398d88d29c.png";
-import imgBitmap5  from "figma:asset/7a4bae4dfe3338c2997556d49e3db2d8c153cff8.png";
-import imgBitmap6  from "figma:asset/340de86374b5d251ba5229da13275b0d13c68f95.png";
-import imgBitmap12 from "figma:asset/203320fdbb2737078a82e83bfc90dc5dcb841de6.png";
-import { HousaLogo } from "../components/shared/HousaLogo";
+import { Link, useNavigate } from "react-router";
+import { SiteNav } from "../components/shared/SiteNav";
+import { AGENTS, type AgentData } from "../data/agents";
 import { FAMILY, bookFont, heavyFont } from "../brand";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-type SortKey  = "agent" | "ratings" | "cashAtClose" | "commission" | "homePrice";
-type Indicator= "check" | "up" | "down";
+// ─── Sort ──────────────────────────────────────────────────────────────────────
+type SortKey = "agent" | "ratings" | "cashAtClose" | "commission" | "homePrice";
 
-interface Agent {
-  id: number; name: string; company: string; photo: string;
-  stars: number; hasAttachment: boolean; isDealMatch: boolean;
-  homePriceLabel: string; homePriceNum: number;
-  feeLabel: string; feeAmount: string; feeAmountNum: number;
-  cashAtClose: string; cashAtCloseNum: number;
-  indicator: Indicator; commissionPct: number;
-}
-
-const AGENTS: Agent[] = [
-  { id:1, name:"Valerie Alhmady",  company:"Century 21",             photo:imgBitmap1,  stars:4, hasAttachment:false, isDealMatch:false, homePriceLabel:"$250,000", homePriceNum:250000, feeLabel:"2.25% fee", feeAmount:"$5,625",  feeAmountNum:5625,  cashAtClose:"$29,735", cashAtCloseNum:29735, indicator:"check", commissionPct:2.25 },
-  { id:2, name:"Marcus Thompson",  company:"Colliers International",  photo:imgBitmap2,  stars:4, hasAttachment:true,  isDealMatch:false, homePriceLabel:"$240,500", homePriceNum:240500, feeLabel:"2.25% fee", feeAmount:"$5,411",  feeAmountNum:5411,  cashAtClose:"$20,089", cashAtCloseNum:20089, indicator:"down",  commissionPct:2.25 },
-  { id:3, name:"Cheryl Brown",     company:"Remax",                   photo:imgBitmap3,  stars:4, hasAttachment:true,  isDealMatch:true,  homePriceLabel:"$250,000", homePriceNum:250000, feeLabel:"2.25% fee", feeAmount:"$5,625",  feeAmountNum:5625,  cashAtClose:"$29,375", cashAtCloseNum:29375, indicator:"check", commissionPct:2.25 },
-  { id:4, name:"Tom Fredericks",   company:"New Home Realtors",       photo:imgBitmap4,  stars:3, hasAttachment:true,  isDealMatch:false, homePriceLabel:"$260,750", homePriceNum:260750, feeLabel:"2% fee",    feeAmount:"$5,215",  feeAmountNum:5215,  cashAtClose:"$40,535", cashAtCloseNum:40535, indicator:"up",    commissionPct:2.0  },
-  { id:5, name:"Marleen Beckett",  company:"First Touch",             photo:imgBitmap5,  stars:4, hasAttachment:false, isDealMatch:false, homePriceLabel:"$240,500", homePriceNum:240500, feeLabel:"2.25% fee", feeAmount:"$5,411",  feeAmountNum:5411,  cashAtClose:"$20,089", cashAtCloseNum:20089, indicator:"down",  commissionPct:2.25 },
-  { id:6, name:"Sara Washington",  company:"Century 21 Prime",        photo:imgBitmap12, stars:3, hasAttachment:true,  isDealMatch:false, homePriceLabel:"$250,000", homePriceNum:250000, feeLabel:"3% fee",    feeAmount:"$7,500",  feeAmountNum:7500,  cashAtClose:"$27,500", cashAtCloseNum:27500, indicator:"down",  commissionPct:3.0  },
-  { id:7, name:"Alli Tang",        company:"Sothby Dallas",           photo:imgBitmap6,  stars:3, hasAttachment:false, isDealMatch:false, homePriceLabel:"$260,000", homePriceNum:260000, feeLabel:"3% fee",    feeAmount:"$7,800",  feeAmountNum:7800,  cashAtClose:"$37,200", cashAtCloseNum:37200, indicator:"up",    commissionPct:3.0  },
-];
-
-function sortAgents(list: Agent[], key: SortKey): Agent[] {
+function sortAgents(list: AgentData[], key: SortKey): AgentData[] {
   const s = [...list];
   switch (key) {
     case "agent":       return s.sort((a,b) => a.name.localeCompare(b.name));
@@ -99,20 +73,27 @@ function DownTriangle() {
   );
 }
 
-function IndicatorIcon({ type }: { type: Indicator }) {
+function IndicatorIcon({ type }: { type: AgentData['indicator'] }) {
   if (type === "check") return <CheckBadge />;
   if (type === "up")    return <UpTriangle />;
   return <DownTriangle />;
 }
 
-function AgentCard({ agent, index }: { agent: Agent; index: number }) {
+// ─── Clickable Agent Row Card ──────────────────────────────────────────────────
+
+function AgentCard({ agent, index }: { agent: AgentData; index: number }) {
+  const navigate = useNavigate();
   const dim = index % 2 !== 0;
   return (
     <div
-      className={`flex items-center gap-4 rounded-[8px] px-4 ${dim ? "bg-black/50" : "bg-black"}`}
+      className={`flex items-center gap-4 rounded-[8px] px-4 cursor-pointer transition-all hover:ring-1 hover:ring-white/20 group ${dim ? "bg-black/50" : "bg-black"}`}
       style={{ minHeight: 101 }}
+      onClick={() => navigate(`/offers/${agent.id}`)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => e.key === 'Enter' && navigate(`/offers/${agent.id}`)}
     >
-      {/* Photo + deal-match badge */}
+      {/* Photo + deal-match */}
       <div className="relative shrink-0 flex flex-col items-center" style={{ width: 58, minWidth: 58 }}>
         <div className="w-[58px] h-[60px] rounded-full overflow-hidden bg-[#D8D8D8]">
           <img src={agent.photo} alt={agent.name} className="w-full h-full object-cover" />
@@ -124,10 +105,7 @@ function AgentCard({ agent, index }: { agent: Agent; index: number }) {
                 <path d="M1 3.64L4.27273 7L10 1" stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
               </svg>
             </div>
-            <span
-              className={`${heavyFont} text-center leading-tight whitespace-nowrap`}
-              style={{ fontSize: 9, color: "#478fff" }}
-            >
+            <span className={`${heavyFont} text-center leading-tight whitespace-nowrap`} style={{ fontSize: 9, color: "#478fff" }}>
               Deal match
             </span>
           </div>
@@ -137,7 +115,7 @@ function AgentCard({ agent, index }: { agent: Agent; index: number }) {
       {/* Name + company + stars */}
       <div className="flex-1 min-w-0 py-2">
         <div className="flex items-center gap-2">
-          <span className={`${bookFont} text-[#85ff00] leading-[25px] truncate`} style={{ fontSize: 25 }}>
+          <span className={`${bookFont} text-[#85ff00] leading-[25px] truncate group-hover:underline`} style={{ fontSize: 25 }}>
             {agent.name}
           </span>
           {agent.hasAttachment && <span className="shrink-0"><Paperclip /></span>}
@@ -177,6 +155,13 @@ function AgentCard({ agent, index }: { agent: Agent; index: number }) {
         >
           {agent.cashAtClose}
         </span>
+      </div>
+
+      {/* View caret */}
+      <div className="shrink-0 hidden sm:flex items-center">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="opacity-30 group-hover:opacity-70 transition-opacity">
+          <path d="M5 2l5 5-5 5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </div>
     </div>
   );
@@ -219,18 +204,14 @@ function SortSidebar({ value, onChange }: { value: SortKey; onChange: (k: SortKe
   );
 }
 
-// ─── Add New Property card ─────────────────────────────────────────────────────
+// ─── Add Property card ─────────────────────────────────────────────────────────
 
 function AddPropertyCard() {
   return (
     <Link
       to="/add-property"
       className="flex items-center justify-center gap-3 rounded-[8px] px-4 transition-all hover:border-[#85ff00]/60 group"
-      style={{
-        minHeight: 80,
-        border: '2px dashed rgba(255,255,255,0.18)',
-        textDecoration: 'none',
-      }}
+      style={{ minHeight: 80, border: '2px dashed rgba(255,255,255,0.18)', textDecoration: 'none' }}
     >
       <div
         className="flex items-center justify-center w-9 h-9 rounded-full transition-all group-hover:bg-[#85ff00]/20"
@@ -240,10 +221,7 @@ function AddPropertyCard() {
           <path d="M8 2v12M2 8h12" stroke="#85ff00" strokeWidth="2.5" strokeLinecap="round"/>
         </svg>
       </div>
-      <span
-        className={`${heavyFont} text-white/40 group-hover:text-white/70 transition-colors`}
-        style={{ fontSize: 15 }}
-      >
+      <span className={`${heavyFont} text-white/40 group-hover:text-white/70 transition-colors`} style={{ fontSize: 15 }}>
         List a new property
       </span>
     </Link>
@@ -253,94 +231,16 @@ function AddPropertyCard() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export function SellerOffers() {
-  const [sortBy,          setSortBy]          = useState<SortKey>("ratings");
-  const [mobileMenuOpen,  setMobileMenuOpen]  = useState(false);
-  const [mobileSortOpen,  setMobileSortOpen]  = useState(false);
-
+  const [sortBy,        setSortBy]        = useState<SortKey>("ratings");
+  const [mobileSortOpen,setMobileSortOpen] = useState(false);
   const sorted = sortAgents(AGENTS, sortBy);
-
-  const navLinks = [
-    { label: "Buy a home",           heavy: false },
-    { label: "Sell my home",         heavy: true  },
-    { label: "Browse home listings", heavy: false },
-    { label: "How this works",       heavy: false },
-    { label: "Resources",            heavy: false },
-  ];
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#004dab", fontFamily: "Avenir, Nunito, sans-serif" }}>
 
-      {/* ══ Navbar ══════════════════════════════════════════════════════════════ */}
-      <nav style={{ backgroundColor: "#004dab" }}>
-        <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8">
-          <div className="flex items-center justify-between" style={{ height: 101 }}>
-            <HousaLogo />
+      <SiteNav />
 
-            {/* Desktop nav links */}
-            <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map(l => (
-                <a
-                  key={l.label} href="#"
-                  className={`${l.heavy ? heavyFont : bookFont} text-white hover:opacity-80 transition-opacity`}
-                  style={{ fontSize: 14 }}
-                >
-                  {l.label}
-                </a>
-              ))}
-            </div>
-
-            {/* Right: List property CTA + greeting + burger */}
-            <div className="flex items-center gap-3">
-              <Link
-                to="/add-property"
-                className={`${heavyFont} hidden sm:flex items-center gap-1.5 rounded-lg px-4 py-2 hover:opacity-90 transition-opacity`}
-                style={{ fontSize: 13, backgroundColor: '#85ff00', color: '#004dab', textDecoration: 'none' }}
-              >
-                + List a Property
-              </Link>
-              <span className={`${heavyFont} hidden sm:block text-white`} style={{ fontSize: 14 }}>
-                Hello there Corwin
-              </span>
-              <button
-                className="lg:hidden text-white p-1"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Toggle menu"
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  {mobileMenuOpen
-                    ? <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>
-                    : <><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></>
-                  }
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile dropdown */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden border-t border-white/10 py-4 flex flex-col gap-3">
-              {navLinks.map(l => (
-                <a key={l.label} href="#"
-                  className={`${l.heavy ? heavyFont : bookFont} text-white px-2 py-1`}
-                  style={{ fontSize: 14 }}
-                >{l.label}</a>
-              ))}
-              <Link
-                to="/add-property"
-                className={`${heavyFont} text-[#85ff00] px-2 py-1`}
-                style={{ fontSize: 14, textDecoration: 'none' }}
-              >
-                + List a Property
-              </Link>
-              <span className={`${heavyFont} text-white px-2 py-1 border-t border-white/10 pt-3`} style={{ fontSize: 14 }}>
-                Hello there Corwin
-              </span>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      {/* ══ Content ═════════════════════════════════════════════════════════════ */}
+      {/* ══ Content ════════════════════════════════════════════════════════════ */}
       <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8 pb-16">
 
         {/* Heading */}
@@ -350,9 +250,9 @@ export function SellerOffers() {
               <span style={{ fontWeight: 400 }}>{"Corwin, you have agents ready to sell "}</span>
               <span style={{ fontWeight: 800 }}>732 Caspian Way</span>
             </p>
-            <a href="#" className={`${bookFont} hover:underline`} style={{ fontSize: 12, color: "#85ff00", lineHeight: "25px" }}>
-              View/edit listing
-            </a>
+            <Link to="/my-homes" className={`${bookFont} hover:underline`} style={{ fontSize: 12, color: "#85ff00", lineHeight: "25px", textDecoration: 'none' }}>
+              View all my listings
+            </Link>
           </div>
           <div className="text-left sm:text-right shrink-0">
             <p className={`${FAMILY} text-white m-0`} style={{ fontSize: 30, lineHeight: "25px" }}>
@@ -365,8 +265,15 @@ export function SellerOffers() {
           </div>
         </div>
 
+        {/* Click hint */}
+        <div className="mt-3 mb-1">
+          <p className={`${bookFont} text-white/30`} style={{ fontSize: 12 }}>
+            Tap any agent to view their full offer details
+          </p>
+        </div>
+
         {/* Column labels */}
-        <div className="flex items-end justify-between mt-2 mb-3" style={{ paddingTop: 12 }}>
+        <div className="flex items-end justify-between mt-1 mb-3" style={{ paddingTop: 8 }}>
           <div className="flex items-end gap-4 w-full">
             <div className="hidden lg:block shrink-0" style={{ width: 180 }} />
             <p className={`${heavyFont} text-white/50 leading-normal m-0`} style={{ fontSize: 12 }}>Agent</p>
@@ -407,10 +314,7 @@ export function SellerOffers() {
                     style={{ fontSize: 12 }}
                     onClick={() => { setSortBy(opt.key); setMobileSortOpen(false); }}
                   >
-                    <div
-                      className="shrink-0 flex items-center justify-center rounded-full border-2 border-white"
-                      style={{ width: 16, height: 16 }}
-                    >
+                    <div className="shrink-0 flex items-center justify-center rounded-full border-2 border-white" style={{ width: 16, height: 16 }}>
                       {sortBy === opt.key && <div className="rounded-full bg-[#004dab]" style={{ width: 6, height: 6 }} />}
                     </div>
                     {opt.label}

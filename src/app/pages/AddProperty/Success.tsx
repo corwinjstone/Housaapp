@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router';
 import confetti from 'canvas-confetti';
-import { HousaLogo } from '../../components/shared/HousaLogo';
+import { SiteNav } from '../../components/shared/SiteNav';
 import { bookStyle, heavyStyle, brandFont } from '../../brand';
 import type { PropertyFormData } from '../../context/PropertyFormContext';
 
@@ -35,15 +35,7 @@ export function SuccessScreen() {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#004dab', fontFamily: brandFont }}>
 
-      {/* Minimal nav */}
-      <nav style={{ backgroundColor: '#004dab' }}>
-        <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8">
-          <div className="flex items-center justify-between" style={{ height: 101 }}>
-            <Link to="/"><HousaLogo /></Link>
-            <span style={{ ...heavyStyle, fontSize: 14, color: 'white' }}>Hello there Corwin</span>
-          </div>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* Content */}
       <div className="flex-1 flex flex-col items-center justify-center px-8 py-16">

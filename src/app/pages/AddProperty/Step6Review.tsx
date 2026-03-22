@@ -158,10 +158,11 @@ export function Step6Review() {
 
       {/* Section 5: Goals */}
       <SectionCard title="Pricing & Goals" editPath="/add-property/goals">
-        <Row label="List Price"          value={data.askingPrice ? fmt(data.askingPrice) : '—'} />
-        <Row label="Target Cash at Close" value={data.targetCashAtClose ? fmt(data.targetCashAtClose) : '—'} />
-        <Row label="Timeline"            value={TIMELINES[data.timeline] ?? '—'} />
-        <Row label="Reason for Selling"  value={data.motivation || '—'} />
+        <Row label="List Price"              value={data.askingPrice ? fmt(data.askingPrice) : '—'} />
+        <Row label="Mortgage Balance"        value={data.mortgage ? fmt(data.mortgage) : 'None'} />
+        <Row label="Target Cash at Close"    value={data.targetCashAtClose ? fmt(data.targetCashAtClose) : '—'} />
+        <Row label="Timeline"               value={TIMELINES[data.timeline] ?? '—'} />
+        <Row label="Reason for Selling"     value={data.motivation || '—'} />
       </SectionCard>
 
       {/* Agreement */}
