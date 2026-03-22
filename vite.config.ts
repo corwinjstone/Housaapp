@@ -1,7 +1,18 @@
-import { defineConfig } from 'vite'
+import { defineConfig, Plugin } from 'vite'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+
+// Resolves figma:asset/... imports used in Figma Make environments
+const figmaAssetPlugin: Plugin = {
+  name: 'figma-asset',
+  resolveId(id) {
+    if (id.startsWith('figma:asset/')) return '\0' + id
+  },
+  load(id) {
+    if (id.startsWith('\0figma:asset/')) return 'export default ""'
+  },
+}
 
 export default defineConfig({
   plugins: [
@@ -9,6 +20,7 @@ export default defineConfig({
     // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
+    figmaAssetPlugin,
   ],
   resolve: {
     alias: {
