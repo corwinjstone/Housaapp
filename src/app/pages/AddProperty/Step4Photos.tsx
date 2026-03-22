@@ -45,7 +45,7 @@ export function Step4Photos() {
   }
 
   return (
-    <div className="max-w-[860px] mx-auto px-8 pb-16">
+    <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8 pb-16">
 
       {/* Drop zone */}
       <div

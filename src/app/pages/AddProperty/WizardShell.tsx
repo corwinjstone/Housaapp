@@ -25,7 +25,7 @@ export function WizardShell() {
         <SiteNav />
 
         {/* ── Step header + progress bar ── */}
-        <div className="max-w-[860px] mx-auto px-8" style={{ paddingTop: 40 }}>
+        <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8" style={{ paddingTop: 40 }}>
           <p style={{ ...bookStyle, fontSize: 12, color: 'rgba(255,255,255,0.45)', margin: 0 }}>
             Step {currentStep} of {WIZARD_STEPS.length} — List Your Property
           </p>

@@ -69,7 +69,7 @@ export function AgentOfferDetail() {
     <div className="min-h-screen" style={{ backgroundColor: '#004dab', fontFamily: brandFont }}>
       <SiteNav />
 
-      <div className="max-w-[1100px] mx-auto px-8 sm:px-12 pb-20" style={{ paddingTop: 40 }}>
+      <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8 pb-20" style={{ paddingTop: 40 }}>
 
         {/* Back */}
         <button

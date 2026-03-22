@@ -74,7 +74,7 @@ export function Step6Review() {
   }
 
   return (
-    <div className="max-w-[860px] mx-auto px-8 pb-16">
+    <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8 pb-16">
 
       {/* Primary photo preview */}
       {data.photos.length > 0 && (

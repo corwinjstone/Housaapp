@@ -4,7 +4,6 @@ import { HousaLogo } from './HousaLogo';
 import { bookFont, heavyFont } from '../../brand';
 
 const NAV_LINKS = [
-  { label: 'Buy a home',           href: '/marketplace', heavy: false },
   { label: 'Sell my home',         href: '/my-homes',    heavy: true  },
   { label: 'Browse home listings', href: '/marketplace', heavy: false },
   { label: 'How this works',       href: '#',            heavy: false },

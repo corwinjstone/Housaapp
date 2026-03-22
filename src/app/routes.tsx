@@ -3,6 +3,7 @@ import { SellerOffers }    from './pages/SellerOffers';
 import { MyHomes }         from './pages/MyHomes';
 import { Marketplace }     from './pages/Marketplace';
 import { AgentOfferDetail} from './pages/AgentOfferDetail';
+import { EditListing }     from './pages/EditListing';
 import { WizardShell }     from './pages/AddProperty/WizardShell';
 import { Step1Address }    from './pages/AddProperty/Step1Address';
 import { Step2Details }    from './pages/AddProperty/Step2Details';
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
   { path: '/my-homes',     Component: MyHomes         },
   { path: '/marketplace',  Component: Marketplace     },
   { path: '/offers/:id',   Component: AgentOfferDetail},
+  { path: '/edit-listing/:id',  Component: EditListing      },
 
   // ── Property submission wizard
   {

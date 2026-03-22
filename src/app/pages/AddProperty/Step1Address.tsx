@@ -69,7 +69,7 @@ export function Step1Address() {
   const previewReady = data.streetAddress || data.city;
 
   return (
-    <div className="max-w-[860px] mx-auto px-8 pb-16">
+    <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8 pb-16">
       <div style={card}>
         {/* Row 1: Street + Unit */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">

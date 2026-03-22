@@ -89,7 +89,7 @@ export function Step5Goals() {
   ];
 
   return (
-    <div className="max-w-[860px] mx-auto px-8 pb-16">
+    <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8 pb-16">
 
       {/* ── Pricing card ── */}
       <div className="rounded-2xl p-6 sm:p-8 mb-4" style={{ backgroundColor: 'rgba(0,0,0,0.25)' }}>

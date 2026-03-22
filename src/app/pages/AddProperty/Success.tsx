@@ -38,8 +38,8 @@ export function SuccessScreen() {
       <SiteNav />
 
       {/* Content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 py-16">
-        <div className="max-w-[620px] w-full text-center">
+      <div className="flex-1 max-w-[1815px] w-full mx-auto px-[85px] sm:px-8 py-16">
+        <div className="max-w-[760px] w-full text-center mx-auto">
 
           {/* Animated checkmark */}
           <div

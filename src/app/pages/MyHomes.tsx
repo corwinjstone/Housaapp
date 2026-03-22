@@ -1,76 +1,14 @@
 import { Link } from 'react-router';
 import { SiteNav } from '../components/shared/SiteNav';
-import { bookStyle, heavyStyle, brandFont, bookFont, heavyFont, FAMILY } from '../brand';
+import { bookStyle, heavyStyle, brandFont, heavyFont, FAMILY } from '../brand';
+import { MY_LISTINGS, type MyListing, type ListingStatus } from '../data/listings';
 
-const HOUSE1 = "https://images.unsplash.com/photo-1720067171688-44a9f8385414?w=640&q=80";
-const HOUSE2 = "https://images.unsplash.com/photo-1759355787114-09af8ee10783?w=640&q=80";
-const HOUSE3 = "https://images.unsplash.com/photo-1755801511747-34b29c87f1f4?w=640&q=80";
-
-type ListingStatus = 'active' | 'pending' | 'sold' | 'draft';
-
-interface MyListing {
-  id:            number;
-  address:       string;
-  city:          string;
-  state:         string;
-  zip:           string;
-  photo:         string;
-  status:        ListingStatus;
-  offerCount:    number;
-  askingPrice:   number;
-  mortgage:      number;
-  targetCash:    number;
-  beds:          number;
-  baths:         number;
-  sqft:          string;
-  type:          string;
-  daysActive:    number;
-}
-
-const MY_LISTINGS: MyListing[] = [
-  {
-    id: 1,
-    address: '732 Caspian Way',
-    city: 'Dallas', state: 'TX', zip: '75201',
-    photo: HOUSE1,
-    status: 'active',
-    offerCount: 7,
-    askingPrice: 250000,
-    mortgage: 185000,
-    targetCash: 29375,
-    beds: 3, baths: 2, sqft: '2,050',
-    type: 'Single Family',
-    daysActive: 12,
-  },
-  {
-    id: 2,
-    address: '1205 Oak Creek Drive',
-    city: 'Austin', state: 'TX', zip: '78701',
-    photo: HOUSE2,
-    status: 'pending',
-    offerCount: 3,
-    askingPrice: 415000,
-    mortgage: 290000,
-    targetCash: 85000,
-    beds: 4, baths: 3, sqft: '2,840',
-    type: 'Single Family',
-    daysActive: 28,
-  },
-  {
-    id: 3,
-    address: '4891 Riverside Blvd',
-    city: 'Houston', state: 'TX', zip: '77002',
-    photo: HOUSE3,
-    status: 'draft',
-    offerCount: 0,
-    askingPrice: 178000,
-    mortgage: 120000,
-    targetCash: 35000,
-    beds: 3, baths: 2, sqft: '1,620',
-    type: 'Townhouse',
-    daysActive: 0,
-  },
-];
+const PROP_TYPE_LABELS: Record<string, string> = {
+  'single-family': 'Single Family',
+  'condo':         'Condo',
+  'townhouse':     'Townhouse',
+  'multi-family':  'Multi-Family',
+};
 
 const STATUS_CONFIG: Record<ListingStatus, { label: string; bg: string; color: string }> = {
   active:  { label: 'Active',         bg: 'rgba(133,255,0,0.15)',  color: '#85ff00' },
@@ -132,7 +70,7 @@ function ListingCard({ listing }: { listing: MyListing }) {
           {/* Quick stats */}
           <div className="flex flex-wrap gap-3 mb-4">
             {[
-              { label: listing.type,         icon: '🏠' },
+              { label: PROP_TYPE_LABELS[listing.propertyType] ?? listing.propertyType, icon: '🏠' },
               { label: `${listing.beds} bd / ${listing.baths} ba`, icon: '🛏' },
               { label: `${listing.sqft} sq ft`, icon: '📐' },
             ].map(({ label, icon }) => (
@@ -188,7 +126,7 @@ function ListingCard({ listing }: { listing: MyListing }) {
             </Link>
           )}
           <Link
-            to="/add-property"
+            to={`/edit-listing/${listing.id}`}
             className="rounded-lg px-3 py-2 hover:opacity-80 transition-opacity"
             style={{ ...bookStyle, fontSize: 13, color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.12)', textDecoration: 'none' }}
           >
@@ -214,7 +152,7 @@ export function MyHomes() {
     <div className="min-h-screen" style={{ backgroundColor: '#004dab', fontFamily: brandFont }}>
       <SiteNav />
 
-      <div className="max-w-[1200px] mx-auto px-8 sm:px-12 pb-16" style={{ paddingTop: 56 }}>
+      <div className="max-w-[1815px] mx-auto px-[85px] sm:px-8 pb-16" style={{ paddingTop: 56 }}>
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
